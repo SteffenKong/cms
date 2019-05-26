@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html><head>
+	    <meta charset="utf-8">
+    {include file="layout/meta" /}
+    <style type="text/css">
+        .open{
+            border:1px solid #ccc;
+            padding:1px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+{include file="layout/header" /}
+
+	<div class="main-container container-fluid">
+		<div class="page-container">
+            {include file="layout/menu" /}
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                                        <li>
+                        <a href="{:url('admin/Index/index')}">系统</a>
+                    </li>
+                                        <li class="active">栏目管理</li>
+                                        </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+
+<button type="button" tooltip="添加配置" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('admin/Cate/add')}'"> <i class="fa fa-plus"></i> 添加栏目
+</button>
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-body">
+                <div class="flip-scroll">
+                    <form action="{:url('admin/Cate/sortData')}" method="post">
+                    <table class="table table-bordered table-hover">
+                        <thead class="">
+                            <tr pid="0">
+                                <th class="text-center">伸缩</th>
+                                <th class="text-center">
+                                    <label><input class="inverted"  id="checkall" name="dels[]" type="checkbox" value=""><span class="text"></span></label>
+                                </th>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">栏目标题</th>
+                                <th class="text-center">栏目名称</th>
+                                <th class="text-center">栏目关键词</th>
+                                <th class="text-center">栏目状态</th>
+                                <th class="text-center">栏目图片</th>
+                                <th class="text-center">栏目属性</th>
+                                <th class="text-center">上级栏目</th>
+                                <th class="text-center">排序</th>
+                                <th class="text-center">模型</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="rows" id="v"}
+                           <tr pid="{$v['parent_id']}" id="{$v['id']}">
+                               <td align="center"><span class="open" id="{$v['id']}">+</span></td>
+                               <td align="center">
+                                   <label><input class="inverted flag" name="itms[]" type="checkbox" value="{$v['id']}"><span class="text"></span></label>
+                               </td>
+                                <td align="center">{$v['id']}</td>
+                               <td align="center"><a href="{:url('admin/Content/index',['cate_id'=>$v['id'],'model_id'=>$v['model_id']])}">{$v['title']}</a></td>
+                                <td align="left">{if condition="$v['level'] neq 0"}|{/if}{$v['level']|str_repeat='---',###}{$v['catename']}
+                                    <a href="{:url('admin/Cate/add',['pid'=>$v['id']])}"  style="float:right;" class="btn btn-sm btn-azure btn-addon" > <i class="fa fa-plus"></i>添加子栏目</a>
+                                </td>
+                                <td align="center">{$v['keyword']}</td>
+                                <td align="center">
+                                    {if condition="$v['status'] eq 0"}
+                                    <a href="javascript:;" id="{$v['id']}"  class="btn btn-danger btn-sm shiny isshow">
+                                        <i class="fa"></i> 隐藏
+                                    </a>
+                                    {else}
+                                    <a href="javascript:;"   id="{$v['id']}" class="btn btn-primary btn-sm shiny isshow">
+                                        <i class="fa"></i> 显示
+                                    </a>
+                                    {/if}
+                                </td>
+                                <td align="center">
+                                    {if condition="$v['image'] neq ''"}
+                                    <img src="http://cms.cn/static/admin/CateUploads/{$v['image']}" style="height:70px; width:120px;" />
+                                    {else}
+                                    暂无图片
+                                    {/if}
+                                </td>
+                                <td align="center">
+                                    {$v['cate_attr']}
+                                </td>
+                               <td align="center">
+                                   {$v['parent_id']}
+                               </td>
+                               <td align="center">
+                                   {$v['model_name']}
+                               </td>
+                               <td align="center">
+                                   <input type="text"  name="sort[{$v['id']}]" value="{$v['sort']}" style="height:30px; width:50px; text-align: center; " />
+                               </td>
+
+                                <td align="center">
+                                    <a href="{:url('admin/Cate/edit',['id'=>$v['id']])}" class="btn btn-primary btn-sm shiny">
+                                        <i class="fa fa-edit"></i> 编辑
+                                    </a>
+                                    <a href="{:url('admin/Cate/delete',['id'=>$v['id']])}"  class="btn btn-danger btn-sm shiny">
+                                        <i class="fa fa-trash-o"></i> 删除
+                                    </a>
+                                </td>
+                            </tr>
+                        {/volist}
+
+                                                    </tbody>
+                    </table>
+                    </form>
+                </div>
+                <div>
+                	                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>
+	</div>
+
+{include file="layout/footer" /}
+
+</body></html>
+<script type="text/javascript">
+    $(function(){
+         $(".isshow").click(function(){
+                var id = $(this).attr('id');
+                $.ajax({
+                    url:"/admin/Cate/changeStatus",
+                    data:{id:id},
+                    dataType:'Json',
+                    type:'POST',
+                    success:function(data)
+                    {
+                        var obj = JSON.parse(data);
+                        if(obj.status === '000')
+                        {
+                            window.location.reload();
+                        }else{
+                            alert('修改失败');
+                        }
+                    }
+                })
+         });
+
+         //负责子栏目的伸缩功能
+        $("tr[pid!='0']").hide();   //首先找到所有pid不为0的tr全部收缩起来
+
+        $(".open").click(function(){        //点击展开的按钮
+            var id = $(this).attr('id');       //获取到当前数据行的id
+            if($(this).text() === '+')          //判断当前的按钮是否缩起来的状态
+            {
+                //展开的功能
+                $(this).text('-');              //将按钮改为展开的状态
+                //获取当前顶级栏目的id
+                $("tr[pid="+id+"]").show();     //将所有属于该pid的数据行全部显示出来
+
+            }else{
+                //这里是负责缩起来的功能，利用ajax技术
+                $(this).text('+');                     //将按钮变成缩起来的状态
+                $.ajax({                            //发送后台请求
+                    url:'/admin/Cate/ajaxList',
+                    data:{id:id},
+                    dataType:'Json',
+                    type:'POST',
+                    success:function(data)
+                    {
+                        //data.data是获取到当前id下的所有子id
+                        var data2 = JSON.parse(data);       //解析为json对象
+                        if(data2.status === '000')
+                        {
+                            var sonIds = [];
+                            var idsObj = $("tr[pid!='0']"); //获取所有pid不为0的子数据行对象
+
+                            idsObj.each(function(k,v){              //遍历所有的子数据行对象
+                                sonIds.push($(this).attr('id'));     //将id属性放到新数组里面
+                            });
+                            $.each(data2.data,function(k,v){            //将刚刚从后台获取到的当前栏目id下的所有子栏目id遍历一下
+                                if($.inArray(v,sonIds)) {               //然后进行逐个对比,如果存在的话就进行收缩
+                                    $("tr[id="+v+"]").hide();           //找到该对象元素然后隐藏起来
+                                    $("tr[id="+v+"]").find('span:first').text('+'); //将按钮默认重置为+
+                                }
+                            });
+
+
+                        }
+                    }
+                });
+            }
+        });
+
+
+
+
+         // $("#checkall").change(function(){
+         //        if($(this).attr('checked'))
+         //        {
+         //            $(".flag").attr('checked','checked');
+         //        }else{
+         //            $(".flag").removeAttr('checked');
+         //        }
+         // });
+    });
+</script>

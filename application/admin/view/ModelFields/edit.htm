@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    {include file="layout/meta" /}
+    <script type="text/javascript" src="__ADMIN__/style/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="__ADMIN__/webuploader/webuploader.js"></script>
+    <link  type="text/css" rel="stylesheet" href="__ADMIN__/webuploader/webuploader.css" />
+    <script type="text/javascript" src="__ADMIN__/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__ADMIN__/plugs/layer/layer/layer.js"></script>
+    <script type="text/javascript" src="__ADMIN__/ueditor/ueditor.all.min.js"></script>
+    <script type="text/javascript" src="__ADMIN__/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="__ADMIN__/common.js"></script>
+</head>
+<body>
+{include file="layout/header" /}
+
+<div class="main-container container-fluid">
+    <div class="page-container">
+        {include file="layout/menu" /}
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Breadcrumb -->
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{:url('admin/Index/index')}">系统</a>
+                    </li>
+                    <li>
+                        <a href="{:url('admin/Modelfields/index')}">模型字段管理</a>
+                    </li>
+                    <li class="active">编辑模型字段</li>
+                </ul>
+            </div>
+            <!-- /Page Breadcrumb -->
+
+            <!-- Page Body -->
+            <div class="page-body">
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+                            <div class="widget-header bordered-bottom bordered-blue">
+                                <span class="widget-caption">编辑模型字段</span>
+                            </div>
+                            <form class="form-horizontal" method="post" action="{:url('/admin/Modelfields/doEdit')}" role="form" enctype="multipart/form-data">
+                                <div class="widget-body">
+                                    <div class="widget-main ">
+                                        <div class="form-group">
+                                            <label for="field_cname" class="col-sm-2 control-label no-padding-right">字段中文名</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" id="field_cname" value="{$row['field_cname']}" class="form-control" name="field_cname" />
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="table_name" class="col-sm-2 control-label no-padding-right">字段英文名</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" id="field_ename" value="{$row['field_ename']}"  class="form-control" name="field_ename" />
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="field_type" class="col-sm-2 control-label no-padding-right">字段类型</label>
+                                            <div class="col-sm-6">
+                                                <select name="field_type">
+                                                    <option value="0">---请选择类型---</option>
+                                                    <option value="1" {if condition="$row['field_type'] eq 1"} selected="selected" {/if}>单行文本</option>
+                                                    <option value="2" {if condition="$row['field_type'] eq 2"} selected="selected" {/if}>单选按钮</option>
+                                                    <option value="3" {if condition="$row['field_type'] eq 3"} selected="selected" {/if}>复选按钮</option>
+                                                    <option value="4" {if condition="$row['field_type'] eq 4"} selected="selected" {/if}>下拉菜单</option>
+                                                    <option value="5" {if condition="$row['field_type'] eq 5"} selected="selected" {/if}>文本域</option>
+                                                    <option value="6" {if condition="$row['field_type'] eq 6"} selected="selected" {/if}>附件</option>
+                                                    <option value="7" {if condition="$row['field_type'] eq 7"} selected="selected" {/if}>浮点型</option>
+                                                    <option value="8" {if condition="$row['field_type'] eq 8"} selected="selected" {/if}>整型</option>
+                                                    <option value="9" {if condition="$row['field_type'] eq 9"} selected="selected" {/if}>长文本类型</option>
+                                                </select>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="field_values" class="col-sm-2 control-label no-padding-right">可选值</label>
+                                            <div class="col-sm-6">
+                                                <textarea name="field_values" id="field_values" value="{$row['field_values']}"   class="form-control" ></textarea>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="model_id" class="col-sm-2 control-label no-padding-right">所属模型</label>
+                                            <div class="col-sm-6">
+                                                <select name="model_id">
+                                                    <option value="0">---请选择模型---</option>
+                                                    {volist name="modelData" id="v"}
+                                                        {if condition="$row['model_id'] eq $v['id']"}
+                                                        <option value="{$v['id']}" selected="selected">{$v['model_name']}</option>
+                                                        {else}
+                                                        <option value="{$v['id']}">{$v['model_name']}</option>
+                                                        {/if}
+                                                    {/volist}
+                                                </select>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" class="btn btn-default">保存信息</button>
+                                                <input type="hidden" value="{$row['id']}" name="id" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+</div>
+
+{include file="layout/footer" /}
+</body></html>

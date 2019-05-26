@@ -1,0 +1,152 @@
+<!-- Page Sidebar -->
+<div class="page-sidebar" id="sidebar">
+    <!-- Page Sidebar Header-->
+    <div class="sidebar-header-wrapper">
+        <input class="searchinput" type="text">
+        <i class="searchicon fa fa-search"></i>
+        <div class="searchhelper">Search Reports, Charts, Emails or Notifications</div>
+    </div>
+    <!-- /Page Sidebar Header -->
+    <!-- Sidebar Menu -->
+    <ul class="nav sidebar-menu">
+        <!--Dashboard-->
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-user"></i>
+                <span class="menu-text">管理员</span>
+                <i class="menu-expand"></i>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/admin/document/index.html">
+                                    <span class="menu-text">
+                                        管理列表                                    </span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-user"></i>
+                <span class="menu-text">模型管理</span>
+                <i class="menu-expand"></i>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="{:url('/admin/Model/index')}">
+                                    <span class="menu-text">
+                                        模型列表                              </span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{:url('/admin/Model/add')}">
+                                    <span class="menu-text">
+                                        添加模型                              </span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li {if condition="$controller eq 'Modelfields'"} class="open" {/if} >
+        <a href="#" class="menu-dropdown">
+            <i class="menu-icon fa fa-user"></i>
+            <span class="menu-text">模型字段管理</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="{:url('/admin/ModelFields/index')}">
+                                    <span class="menu-text">
+                                        字段列表                              </span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href="{:url('/admin/ModelFields/add')}">
+                                    <span class="menu-text">
+                                        添加字段                             </span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+        </ul>
+        </li>
+
+
+        <!--如果是当前控制器在操控该模块下的栏目，这里要保持栏目的展开-->
+        <li {if condition="$controller eq 'Cate'"} class="open" {/if} >
+        <a href="javascript:void(0);" class="menu-dropdown">
+            <i class="menu-icon fa  fa-list"></i>
+            <span class="menu-text">栏目管理</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="{:url('admin/Cate/index')}">
+                                    <span class="menu-text">
+                                        栏目列表                                   </span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href="{:url('admin/Cate/add')}">
+                                    <span class="menu-text">
+                                        栏目添加                                   </span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+        </ul>
+        </li>
+
+        <!--如果是当前控制器在操控该模块下的栏目，这里要保持栏目的展开-->
+        <li {if condition="$controller eq 'Conf'"} class="open" {/if} >
+        <a href="#" class="menu-dropdown">
+            <i class="menu-icon fa fa-gear"></i>
+            <span class="menu-text">系统配置</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="{:url('admin/Conf/conf')}">
+                                    <span class="menu-text">
+                                        配置列表                                   </span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href="{:url('admin/Conf/index')}">
+                                    <span class="menu-text">
+                                        配置管理                                   </span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+        </ul>
+        </li>
+
+        <!--如果是当前控制器在操控该模块下的栏目，这里要保持栏目的展开-->
+        <li {if condition="$controller eq 'Content'"} class="open" {/if} >
+        <a href="#" class="menu-dropdown">
+            <i class="menu-icon fa fa-gear"></i>
+            <span class="menu-text">文档管理</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="{:url('admin/Content/index')}">
+                                    <span class="menu-text">
+                                        文档列表                                   </span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+        </ul>
+        </li>
+
+    </ul>
+    <!-- /Sidebar Menu -->
+</div>
+<!-- /Page Sidebar -->
+<!-- Page Content -->

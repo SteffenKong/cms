@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    {include file="layout/meta" /}
+    <script type="text/javascript" src="__ADMIN__/style/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="__ADMIN__/webuploader/webuploader.js"></script>
+    <link  type="text/css" rel="stylesheet" href="__ADMIN__/webuploader/webuploader.css" />
+    <script type="text/javascript" src="__ADMIN__/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__ADMIN__/ueditor/ueditor.all.min.js"></script>
+    <script type="text/javascript" src="__ADMIN__/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="__ADMIN__/common.js"></script>
+</head>
+<body>
+{include file="layout/header" /}
+
+<div class="main-container container-fluid">
+    <div class="page-container">
+        {include file="layout/menu" /}
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Breadcrumb -->
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{:url('admin/Index/index')}">系统</a>
+                    </li>
+                    <li>
+                        <a href="{:url('admin/Cate/index')}">栏目管理</a>
+                    </li>
+                    <li class="active">编辑栏目</li>
+                </ul>
+            </div>
+            <!-- /Page Breadcrumb -->
+
+            <!-- Page Body -->
+            <div class="page-body">
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+                            <div class="widget-header bordered-bottom bordered-blue">
+                                <span class="widget-caption">编辑栏目</span>
+                            </div>
+                            <form class="form-horizontal" method="post" action="{:url('/admin/Cate/doEdit')}" role="form" enctype="multipart/form-data">
+                                <div class="widget-body">
+                                    <div class="widget-main ">
+                                        <div class="tabbable">
+                                            <ul class="nav nav-tabs  tabs-flat">
+                                                <li class="active"><a data-toggle="tab" href="#FlatTab-1" aria-expanded="true">基本信息</a></li>
+                                                <li class=""><a data-toggle="tab" href="#FlatTab-2" aria-expanded="false">SEO信息</a></li>
+                                                <li class=""><a data-toggle="tab" href="#FlatTab-3">栏目内容</a></li>
+                                            </ul>
+
+                                            <div class="tab-content  tabs-flat"><div class="tab-pane active" id="FlatTab-1">
+
+                                                <div class="form-group">
+                                                    <label for="parent_id" class="col-sm-2 control-label no-padding-right">所属模型</label>
+                                                    <div class="col-sm-6">
+                                                        <select name="model_id">
+                                                            <option value="0">选择模型</option>
+                                                            {volist name="models" id="v"}
+                                                                {if condition="$row['model_id'] eq $v['id']"}
+                                                                <option value="{$v['id']}" selected="selected">{$v['model_name']}</option>
+                                                                {else}
+                                                                <option value="{$v['id']}">{$v['model_name']}</option>
+                                                                {/if}
+                                                            {/volist}
+                                                        </select>
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="parent_id" class="col-sm-2 control-label no-padding-right">上级栏目名称</label>
+                                                    <div class="col-sm-6">
+                                                        <select name="parent_id">
+                                                            <option value="0">顶级栏目</option>
+                                                            {volist name="rows" id="v"}
+                                                                {if condition="$row['parent_id'] eq $v['id']"}
+                                                                <option value="{$v['id']}" selected="selected">{if condition="$v['level'] neq 0"}|{/if}{$v['level']|str_repeat='---',###}{$v['catename']}</option>
+                                                                {else}
+                                                                <option value="{$v['id']}">{if condition="$v['level'] neq 0"}|{/if}{$v['level']|str_repeat='---',###}{$v['catename']}</option>
+                                                                {/if}
+                                                            {/volist}
+                                                        </select>
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="catename" class="col-sm-2 control-label no-padding-right">栏目名称</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" id="catename" value="{$row['catename']}" name="catename" />
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="status" class="col-sm-2 control-label no-padding-right">隐藏栏目</label>
+                                                    <div class="col-sm-6">
+                                                        <label><input class="inverted" id="status" {if condition="$row['status'] eq 0 "} checked="checked" {/if} name="status" type="checkbox" value="0">
+                                                            <span class="text">隐藏</span></label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="cate_attr" class="col-sm-2 control-label no-padding-right">栏目属性</label>
+                                                    <div class="col-sm-6">
+                                                        <label><input name="cate_attr" type="radio" value="1" {if condition="$row['cate_attr'] eq 1"} checked="checked" {/if}  >
+                                                            <span class="text">列表页栏目(可以发布文章)</span></label>
+
+                                                        <label><input  name="cate_attr" type="radio" value="2" {if condition="$row['cate_attr'] eq 2"} checked="checked" {/if}>
+                                                            <span class="text">封面频道栏目(不可以发布文章)</span></label>
+
+                                                        <label><input  name="cate_attr" type="radio" value="3" {if condition="$row['cate_attr'] eq 3"} checked="checked" {/if}>
+                                                            <span class="text">外链栏目(不可以发布文章)</span></label>
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="list_tmp" class="col-sm-2 control-label no-padding-right">列表页模板</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" id="list_tmp" name="list_tmp" value="{$row['list_tmp']}" />
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="index_tmp" class="col-sm-2 control-label no-padding-right">频道页模板</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" id="index_tmp" value="{$row['index_tmp']}" name="index_tmp"  />
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="article_tmp" class="col-sm-2 control-label no-padding-right">内容页模板</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" id="article_tmp"  name="article_tmp" value="{$row['article_tmp']}"  />
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="article_tmp" class="col-sm-2 control-label no-padding-right">外链地址</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" id="link_tmp" name="link" value="{$row['link']}" />
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 如果选了外链模式,就在此填写链接地址</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="catename" class="col-sm-2 control-label no-padding-right">栏目图片</label>
+                                                    <div class="col-sm-6">
+                                                        <!--dom结构部分-->
+                                                        <div id="uploader-demo">
+                                                            <!--用来存放item-->
+                                                            <div id="fileList" class="uploader-list">
+                                                                {if condition="$row['image'] neq ''"}
+                                                                <div id="WU_FILE_0" class="file-item thumbnail upload-state-done">
+                                                                    <img style="height:70px; width:100px;" src="http://cms.cn/static/admin/CateUploads/{$row['image']}"><div class="info">图片</div></div>
+                                                                {/if}
+                                                            </div>
+                                                            <div id="filePicker">选择图片</div>
+                                                            <input type="hidden" name="image" value="{$row['image']}" id="image" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                                <div class="tab-pane" id="FlatTab-2">
+                                                    <div class="form-group">
+                                                        <label for="title" class="col-sm-2 control-label no-padding-right">栏目标题</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" id="title" class="form-control" name="title" value="{$row['title']}" />
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="keyword" class="col-sm-2 control-label no-padding-right">关键词</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" id="keyword" class="form-control" value="{$row['keyword']}" name="keyword" />
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="des" class="col-sm-2 control-label no-padding-right">描述</label>
+                                                        <div class="col-sm-6">
+                                                            <textarea name="des" id="des" class="form-control">{$row['des']}</textarea>
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tab-pane" id="FlatTab-3">
+                                                    <div class="form-group">
+                                                        <label for="content" class="col-sm-2 control-label no-padding-right">栏目内容</label>
+                                                        <div class="col-sm-6">
+                                                            <textarea  id="content" name="content">{$row['content']}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" class="btn btn-default">保存信息</button>
+                                                <input type="hidden" value="{$row['id']}" name="id" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+</div>
+
+{include file="layout/footer" /}
+
+<script type="text/javascript">
+    var ue = UE.getEditor('content', {
+        initialFrameHeight:'500',
+        initialFrameWidth:'1000',
+        maximumWords:30000
+    });
+
+
+    //由于这里是编辑界面，进入的方式只有一种，所以选择不同的栏目直接加载出对应的模板和模型就好
+    $("select[name='parent_id']").change(function(){
+        var pcatid = $("select[name='parent_id']").find("option:selected").val();
+        if(pcatid != 0)
+        {
+            $.ajax({
+                type:'POST',
+                dataType:'Json',
+                data:{catId:pcatid},
+                url:"/admin/cate/ajaxCateInfo",
+                success:function(data)
+                {
+                    var dataObj = JSON.parse(data);
+                    if(dataObj.status === '000')
+                    {
+                        console.log(dataObj);
+                        $("input[name='list_tmp']").val(dataObj.data.list_tmp);
+                        $("input[name='index_tmp']").val(dataObj.data.index_tmp);
+                        $("input[name='article_tmp']").val(dataObj.data.article_tmp);
+                        $("select[name='model_id']").val(dataObj.data.model_id);
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+</body></html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    {include file="layout/meta" /}
+
+    <script type="text/javascript" src="__ADMIN__/style/jquery.js"></script>
+    <script type="text/javascript" src="__ADMIN__/look/js/lightbox-0.5.js"></script>
+    <link rel="stylesheet" type="text/css" href="__ADMIN__/look/css/lightbox-0.5.css" media="screen" />
+</head>
+<body>
+{include file="layout/header" /}
+
+<div class="main-container container-fluid">
+    <div class="page-container">
+        {include file="layout/menu" /}
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Breadcrumb -->
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{:url('admin/Index/index')}">系统</a>
+                    </li>
+                    <li>
+                        <a href="{:url('admin/Conf/index')}">配置管理</a>
+                    </li>
+                    <li class="active">添加配置</li>
+                </ul>
+            </div>
+            <!-- /Page Breadcrumb -->
+
+            <!-- Page Body -->
+            <div class="page-body">
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <form class="form-horizontal" role="form" action="{:url('admin/Conf/doConf')}" method="post" enctype="multipart/form-data">
+                        <div class="widget-body">
+                            <div class="widget-main ">
+                                <div class="tabbable">
+                                    <ul class="nav nav-tabs  tabs-flat">
+                                    <li class="active ">
+                                        <a data-toggle="tab" href="#FlatTab-1">基本配置信息</a>
+                                    </li>
+                                        <li class="">
+                                        <a data-toggle="tab" href="#FlatTab-2">附件配置信息</a>
+                                        </li>
+                                    <li class="">
+                                        <a data-toggle="tab" href="#FlatTab-3">其他配置信息</a>
+                                    </li>
+                                </ul>
+                                    <div class="tab-content  tabs-flat">
+                                        <div class="active tab-pane" id="FlatTab-1">
+                                            {/*
+                                                这里将所有的配置数据进行一个遍历
+                                            */}
+                                            {volist name="confRes" id="v"}
+                                                {/* 这里将配置数据类型为基本配置信息的就显示在里面 */}
+                                                {if condition="$v['cf_type'] eq 1"}
+                                                    {if condition="$v['dt_type'] eq 1"}
+                                                        <div class="form-group">
+                                                            <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                            <div class="col-sm-6">
+                                                                <input class="form-control" id="{$v['ename']}" value="{$v['value']}"  name="{$v['ename']}"  type="text">
+                                                            </div>
+                                                        </div>
+                                                    {elseif condition="$v['dt_type'] eq 2"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <?php foreach(explode(',',$v['values']) as $kk=>$vv): ?>
+                                                    <?php if($vv == $v['value']): ?>
+                                                    <label><input name="{$v['ename']}" checked="checked" type="radio"  value="<?php echo $vv; ?>"><span class="text"><?php echo $vv; ?></span></label>
+                                                    <?php else: ?>
+                                                    <label><input name="{$v['ename']}" type="radio" value="<?php echo $vv; ?>"><span class="text"><?php echo $vv; ?></span></label>
+                                                    <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                                    {elseif condition="$v['dt_type'] eq 3"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <?php foreach(explode(',',$v['values']) as $kk=>$vv): ?>
+                                                    {if condition="in_array($vv,explode(',',$v['value']))"}
+                                                        <label><input   name="{$v['ename']}[]" checked="checked" type="checkbox" value="{$vv}"><span class="text">{$vv}</span></label>
+                                                            {else}
+                                                    <label><input   name="{$v['ename']}[]" type="checkbox" value="{$vv}"><span class="text">{$vv}</span></label>
+                                                            {/if}
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                                    {elseif condition="$v['dt_type'] eq 4"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <select style="width:100%" name="{$v['ename']}">
+                                                        <option selected="selected" value="0">请选择</option>
+                                                        <?php foreach(explode(',',$v['values']) as $kk=>$vv): ?>
+                                                        {if condition="$vv eq $v['value']"}
+                                                          <option selected="selected"  value="{$vv}">{$vv}</option>
+                                                        {else}
+                                                            <option  value="{$vv}">{$vv}</option>
+                                                        {/if}
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                                    {elseif condition="$v['dt_type'] eq 5"}
+                                                        <div class="form-group">
+                                                            <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                            <div class="col-sm-6">
+                                                                <textarea class="form-control" name="{$v['ename']}">{$v['value']}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    {elseif condition="$v['dt_type'] eq 6"}
+                                                        <div class="form-group">
+                                                            <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="file" name="{$v['ename']}" />
+                                                            </div>
+                                                            <!--图片弹出框-->
+                                                            {if condition="$v['value'] neq ''"}
+                                                                <div id="gallery">
+                                                                    <ul>
+                                                                        <li>
+                                                                            <a href="#">
+                                                                                <img src="http://cms.cn/static/admin/uploads/{$v['value']}" width="72" height="72" alt="" />
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <a href="#"></a>
+                                                            {else}
+                                                                暂无图片
+                                                            {/if}
+                                                        </div>
+                                                    {else}
+                                                            {/*
+                                                                这里不做处理
+                                                            */}
+                                                    {/if}
+                                                {/if}
+                                            {/volist}
+                                </div>
+
+
+
+
+                                        <div class="tab-pane" id="FlatTab-2">
+                                            {/*
+                                            这里将所有的配置数据进行一个遍历
+                                            */}
+                                            {volist name="confRes" id="v"}
+                                            {/* 这里将配置数据类型为基本配置信息的就显示在里面 */}
+                                            {if condition="$v['cf_type'] eq 2"}
+                                            {if condition="$v['dt_type'] eq 1"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" id="{$v['ename']}" value="{$v['value']}"  name="{$v['ename']}"  type="text">
+                                                </div>
+                                            </div>
+                                            {elseif condition="$v['dt_type'] eq 2"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <?php foreach(explode(',',$v['values']) as $kk=>$vv): ?>
+                                                    <?php if($vv == $v['value']): ?>
+                                                    <label><input name="{$v['ename']}" checked="checked"  value="<?php echo $vv; ?>" type="radio"><span class="text"><?php echo $vv; ?></span></label>
+                                                    <?php else: ?>
+                                                    <label><input name="{$v['ename']}" type="radio"  value="<?php echo $vv; ?>" ><span class="text"><?php echo $vv; ?></span></label>
+                                                    <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                            {elseif condition="$v['dt_type'] eq 3"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <?php foreach(explode(',',$v['values']) as $kk=>$vv): ?>
+                                                    {if condition="in_array($vv,explode(',',$v['value']))"}
+                                                    <label><input   name="{$v['ename']}[]" checked="checked" type="checkbox" value="{$vv}"><span class="text">{$vv}</span></label>
+                                                    {else}
+                                                    <label><input   name="{$v['ename']}[]" type="checkbox" value="{$vv}"><span class="text">{$vv}</span></label>
+                                                    {/if}
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                            {elseif condition="$v['dt_type'] eq 4"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <select style="width:100%" name="{$v['ename']}">
+                                                        <option selected="selected" value="0">请选择</option>
+                                                        <?php foreach(explode(',',$v['values']) as $kk=>$vv): ?>
+                                                        {if condition="$vv eq $v['value']"}
+                                                        <option selected="selected"  value="{$vv}">{$vv}</option>
+                                                        {else}
+                                                        <option  value="{$vv}">{$vv}</option>
+                                                        {/if}
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            {elseif condition="$v['dt_type'] eq 5"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <textarea class="form-control" name="{$v['ename']}">{$v['value']}</textarea>
+                                                </div>
+                                            </div>
+                                            {elseif condition="$v['dt_type'] eq 6"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <input type="file" name="{$v['ename']}" />
+                                                </div>
+                                                <!--图片弹出框-->
+                                                {if condition="$v['value'] neq ''"}
+                                                <div id="gallery">
+                                                    <ul>
+                                                        <li>
+                                                            <a href="#">
+                                                                <img src="http://cms.cn/static/admin/uploads/{$v['value']}" width="72" height="72" alt="" />
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <a href="#"></a>
+                                                {else}
+                                                暂无图片
+                                                {/if}
+                                            </div>
+                                            {else}
+                                            {/*
+                                            这里不做处理
+                                            */}
+                                            {/if}
+                                            {/if}
+                                            {/volist}
+                                </div>
+
+
+
+
+                                        <div class="tab-pane" id="FlatTab-3">
+                                            {/*
+                                            这里将所有的配置数据进行一个遍历
+                                            */}
+                                            {volist name="confRes" id="v"}
+                                            {/* 这里将配置数据类型为基本配置信息的就显示在里面 */}
+                                            {if condition="$v['cf_type'] eq 3"}
+                                            {if condition="$v['dt_type'] eq 1"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" id="{$v['ename']}" value="{$v['value']}"  name="{$v['ename']}"  type="text">
+                                                </div>
+                                            </div>
+                                            {elseif condition="$v['dt_type'] eq 2"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <?php foreach(explode(',',$v['values']) as $kk=>$vv): ?>
+                                                    <?php if($vv == $v['value']): ?>
+                                                    <label><input name="{$v['ename']}" checked="checked" type="radio" value="<?php echo $vv; ?>" ><span class="text"><?php echo $vv; ?></span></label>
+                                                    <?php else: ?>
+                                                    <label><input name="{$v['ename']}" type="radio"  value="<?php echo $vv; ?>" ><span class="text"><?php echo $vv; ?></span></label>
+                                                    <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                            {elseif condition="$v['dt_type'] eq 3"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <?php foreach(explode(',',$v['values']) as $kk=>$vv): ?>
+                                                    {if condition="in_array($vv,explode(',',$v['value']))"}
+                                                    <label><input   name="{$v['ename']}[]" checked="checked" type="checkbox" value="{$vv}"><span class="text">{$vv}</span></label>
+                                                    {else}
+                                                    <label><input   name="{$v['ename']}[]" type="checkbox" value="{$vv}"><span class="text">{$vv}</span></label>
+                                                    {/if}
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                            {elseif condition="$v['dt_type'] eq 4"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <select style="width:100%" name="{$v['ename']}">
+                                                        <option selected="selected" value="0">请选择</option>
+                                                        <?php foreach(explode(',',$v['values']) as $kk=>$vv): ?>
+                                                        {if condition="$vv eq $v['value']"}
+                                                        <option selected="selected"  value="{$vv}">{$vv}</option>
+                                                        {else}
+                                                        <option  value="{$vv}">{$vv}</option>
+                                                        {/if}
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            {elseif condition="$v['dt_type'] eq 5"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <textarea class="form-control" name="{$v['ename']}">{$v['value']}</textarea>
+                                                </div>
+                                            </div>
+                                            {elseif condition="$v['dt_type'] eq 6"}
+                                            <div class="form-group">
+                                                <label for="{$v['ename']}" class="col-sm-2 control-label no-padding-right">{$v['cname']}</label>
+                                                <div class="col-sm-6">
+                                                    <input type="file" name="{$v['ename']}" />
+                                                </div>
+                                                <!--图片弹出框-->
+                                                {if condition="$v['value'] neq ''"}
+                                                <div id="gallery">
+                                                    <ul>
+                                                        <li>
+                                                            <a href="#">
+                                                                <img src="http://cms.cn/static/admin/uploads/{$v['value']}" width="72" height="72" alt="" />
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <a href="#"></a>
+                                                {else}
+                                                暂无图片
+                                                {/if}
+                                            </div>
+                                            {else}
+                                            {/*
+                                            这里不做处理
+                                            */}
+                                            {/if}
+                                            {/if}
+                                            {/volist}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">保存信息</button>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+</div>
+
+
+
+{include file="layout/footer" /}
+<script type="text/javascript">
+    $(function() {
+        $('#gallery a').lightBox({
+
+        });
+    });
+</script>
+</body></html>

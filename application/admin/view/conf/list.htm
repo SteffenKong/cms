@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html><head>
+	    <meta charset="utf-8">
+    {include file="layout/meta" /}
+    
+</head>
+<body>
+{include file="layout/header" /}
+	
+	<div class="main-container container-fluid">
+		<div class="page-container">
+            {include file="layout/menu" /}
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                                        <li>
+                        <a href="{:url('admin/Index/index')}">系统</a>
+                    </li>
+                                        <li class="active">配置管理</li>
+                                        </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+                    
+<button type="button" tooltip="添加配置" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('admin/Conf/add')}'"> <i class="fa fa-plus"></i> 添加配置
+</button>
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-body">
+                <div class="flip-scroll">
+                    <table class="table table-bordered table-hover">
+                        <thead class="">
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">配置中文名</th>
+                                <th class="text-center">配置英文名</th>
+                                <th class="text-center">配置默认值</th>
+                                <th class="text-center">配置可选值</th>
+                                <th class="text-center">配置类型</th>
+                                <th class="text-center">配置数据类型</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="rows" id="v"}
+                           <tr>
+                                <td align="center">{$v['id']}</td>
+                                <td align="center">{$v['cname']}</td>
+                                <td align="center">{$v['ename']}</td>
+                                <td align="center">
+                                    {if condition="$v['value']"}
+                                        {$v['value']}
+                                    {else}
+                                        未定义
+                                    {/if}
+                                </td>
+                                <td align="center">
+                                    {if condition="$v['values']"}
+                                        {$v['values']}
+                                    {else}
+                                        未定义
+                                    {/if}
+                                </td>
+                                <td align="center">
+                                    {if condition="$v['dt_type'] eq 1"}
+                                        文本框
+                                    {elseif condition="$v['dt_type'] eq 2" }
+                                        单选按钮
+                                    {elseif condition="$v['dt_type'] eq 3" }
+                                        复选按钮
+                                    {elseif condition="$v['dt_type'] eq 4" }
+                                        下拉菜单
+                                    {elseif condition="$v['dt_type'] eq 5" }
+                                        文本域
+                                    {elseif condition="$v['dt_type'] eq 6" }
+                                        附件
+                                    {else}
+
+                                    {/if}
+                                </td>
+                               <td align="center">
+                                   {if condition="$v['cf_type'] eq 1"}
+                                   基本信息配置
+                                   {elseif condition="$v['cf_type'] eq 2" }
+                                   联系方式配置
+                                   {elseif condition="$v['cf_type'] eq 3" }
+                                   SEO设置
+                                   {else}
+
+                                   {/if}
+                               </td>
+                                <td align="center">
+                                    <a href="{:url('admin/Conf/edit',['id'=>$v['id']])}" class="btn btn-primary btn-sm shiny">
+                                        <i class="fa fa-edit"></i> 编辑
+                                    </a>
+                                    <a href="{:url('admin/Conf/delete',['id'=>$v['id']])}"  class="btn btn-danger btn-sm shiny">
+                                        <i class="fa fa-trash-o"></i> 删除
+                                    </a>
+                                </td>
+                            </tr>
+                        {/volist}
+                        <tr>
+                            <td colspan="8" align="right">
+                                {$rows->render()}
+                            </td>
+                        </tr>
+
+                                                    </tbody>
+                    </table>
+                </div>
+                <div>
+                	                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>	
+	</div>
+
+{include file="layout/footer" /}
+
+</body></html>
